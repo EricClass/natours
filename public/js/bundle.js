@@ -6578,9 +6578,55 @@ try {
 }
 
 },{}],"mapbox.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.displayMap = void 0;
+
 /* eslint-disable */
-// const locations = JSON.parse(document.getElementById('map').dataset.locations);
-// console.log(locations);
+var displayMap = function displayMap(locations) {
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZXJpY2NsYXNzIiwiYSI6ImNrZGY2dXRtazEwc2syc3FxNW40enZleGwifQ.K8eRiNXk7sqVyMg8x7a5RA';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/ericclass/ckdf74ma6074d1iqs9r11gsc7',
+    scrollZoom: false // center: [-118.113491, 34.111745],
+    // zoom: 10,
+    // interactive: false
+
+  });
+  var bounds = new mapboxgl.LngLatBounds();
+  locations.forEach(function (loc) {
+    // Create marker
+    var el = document.createElement('div');
+    el.className = 'marker'; // Add marker
+
+    new mapboxgl.Marker({
+      element: el,
+      anchor: 'bottom'
+    }).setLngLat(loc.coordinates).addTo(map); // Add popup
+    // new mapboxgl.Popup({
+    //   offset: 30,
+    // })
+    //   .setLngLat(loc.coordinates)
+    //   .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
+    //   .addTo(map);
+    // Extend map bounds to include current location
+
+    bounds.extend(loc.coordinates);
+  });
+  map.fitBounds(bounds, {
+    padding: {
+      top: 200,
+      bottom: 150,
+      left: 100,
+      right: 100
+    }
+  });
+};
+
+exports.displayMap = displayMap;
 },{}],"../../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
@@ -8623,7 +8669,7 @@ var bookTour = /*#__PURE__*/function () {
 
           case 3:
             session = _context.sent;
-            console.log(session); // 2/ Create checkout from + change credit card
+            console.log(session); // 2/ Create checkout form + change credit card
 
             _context.next = 7;
             return stripe.redirectToCheckout({
@@ -8926,11 +8972,17 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 // DOM ELEMENTS
+var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.form--login');
 var logOutBtn = document.querySelector('.nav__el--logout');
 var userDataForm = document.querySelector('.form-user-data');
 var userPasswordForm = document.querySelector('.form-user-password');
 var bookBtn = document.getElementById('book-tour'); // DELEGATION
+
+if (mapBox) {
+  var locations = JSON.parse(mapBox.dataset.locations);
+  (0, _mapbox.displayMap)(locations);
+}
 
 if (loginForm) {
   loginForm.addEventListener('submit', function (e) {
@@ -9027,7 +9079,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "3878" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8960" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
