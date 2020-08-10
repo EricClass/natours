@@ -140,7 +140,7 @@ tourSchema.virtual('reviews', {
   localField: '_id',
 });
 
-// DOCUMENT MIDDLEWARE: rusn before .save and .create() but not on .insertMany
+// DOCUMENT MIDDLEWARE: runs before .save and .create() but not on .insertMany
 tourSchema.pre('save', function (next) {
   //console.log(this);  logs the current document being saved
   this.slug = slugify(this.name, { lower: true });
